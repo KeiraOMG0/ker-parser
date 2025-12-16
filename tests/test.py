@@ -1,16 +1,17 @@
-# simple test / example runner for local dev
-from ker_parser.main import Parser, to_json, dumps_to_ker
+import os
+import ker
 
 def main():
-    with open("examples/example.ker", "r", encoding="utf-8") as f:
+    # path relative to this file
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    example_path = os.path.join(root_dir, "examples", "example.ker")
+
+    with open(example_path, "r", encoding="utf-8") as f:
         text = f.read()
 
-    root = Parser(text).parse()
-
-    print("JSON output:\n")
-    print(to_json(root, indent=2))
-    print("\nPretty .ker (round-tripped):\n")
-    print(dumps_to_ker(root))
+    data = ker.loads(text)
+    print("JSON output:\n", data)
+    print("\nRound-tripped .ker:\n", ker.dumps(data))
 
 if __name__ == "__main__":
     main()
